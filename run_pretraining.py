@@ -1,22 +1,4 @@
 # coding=utf-8
-# Copyright 2018 The Google AI Language Team Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""Run masked LM/next sentence masked_lm pre-training for BERT."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import argparse
 from transformers import AutoConfig, AutoModelForMaskedLM, AutoTokenizer
@@ -25,7 +7,7 @@ import torch
 from create_pretraining_data import DataModule
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-class light_model(pl.LightningModule):
+class Pretrain_model(pl.LightningModule):
   def __init__(self):
     super().__init__()
     self.config = AutoConfig.from_pretrained('bert-base-multilingual-cased')
@@ -107,7 +89,7 @@ def main():
   pl.seed_everything(random_seed)
   data = DataModule(tokenizer, random_seed, max_seq_length, dupe_factor, masked_lm_prob, input_file)
   trainer = pl.Trainer(max_epochs = args.num_train_epochs, accelerator="cpu")
-  model = light_model()
+  model = Pretrain_model()
   trainer.fit(model,data,ckpt_path=args.init_checkpoinit)
 
 
