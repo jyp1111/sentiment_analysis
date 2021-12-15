@@ -119,7 +119,7 @@ class Classifier_model(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         loss = self(batch)[0]
-        return loss, len(batch)
+        return loss, len(batch[0])
 
     def validation_epoch_end(self, validation_step_outputs):
         total_loss = 0
